@@ -1,39 +1,90 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Shopping List Page</h1>
+    <style>
+        .logout-button {
+            background-color: red; /* Mengatur warna latar belakang tombol menjadi merah */
+            color: white; /* Mengatur warna teks menjadi putih */
+            border: none; /* Menghapus border tombol */
+            padding: 10px 20px; /* Menambahkan padding untuk meningkatkan tampilan tombol */
+            border-radius: 5px; /* Mengatur sudut border tombol */
+            cursor: pointer; /* Mengubah kursor menjadi tanda tangan saat mengarahkan ke tombol */
+        }
 
-    <h5>Name:</h5>
-    <p>{{name}}</p>
+        /* Gaya tambahan jika tombol ditekan */
+        .logout-button:active {
+            background-color: darkred; /* Mengubah warna latar belakang saat tombol ditekan */
+        }
+    </style>
 
-    <h5>Class:</h5>
-    <p>{{class}}</p>
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Description</th>
-            <th>Date Added</th>
-        </tr>
-
-        {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
-
-        {% for product in products %}
-            <tr>
-                <td>{{product.name}}</td>
-                <td>{{product.price}}</td>
-                <td>{{product.description}}</td>
-                <td>{{product.date_added}}</td>
-            </tr>
-        {% endfor %}
-    </table>
-
-    <br />
-
-    <a href="{% url 'main:create_product' %}">
-        <button>
-            Add New Product
+    
+    <nav class="navbar navbar-expand-lg" style="background-color:#EFF2F9;">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
         </button>
-    </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <span class="nav-link">Logged in as: {{ name }}</span>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'main:logout' %}" class="nav-link">
+                        <button class="logout-button">Logout</button>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
+    <div class="container">
+        <h1>Shopping List Page</h1>
+
+        <h5>Name:</h5>
+        <p>{{name}}</p>
+
+        <h5>Class:</h5>
+        <p>{{class}}</p>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Date Added</th>
+            </tr>
+
+            {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
+
+            {% for product in products %}
+                <tr>
+                    <td>{{product.name}}</td>
+                    <td>{{product.price}}</td>
+                    <td>{{product.description}}</td>
+                    <td>{{product.date_added}}</td>
+                    <td>
+                        <a href="{% url 'main:edit_product' product.pk %}">
+                            <button>
+                                Edit
+                            </button>
+                        </a>
+                        <a href="{% url 'main:delete_product' product.pk %}">
+                              <button>
+                                  Delete
+                              </button>
+                          </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <br />
+
+        <h5>Sesi terakhir login: {{ last_login }}</h5>
+        
+        <a href="{% url 'main:create_product' %}">
+            <button>
+                Add New Product
+            </button>
+        </a>
+
+    </div>    
 {% endblock content %}
